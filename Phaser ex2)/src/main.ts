@@ -3,6 +3,7 @@ import Phaser from 'phaser'
 // import HelloWorldScene from './scenes/HelloWorldScene'
 import Preloader from './scenes/Preloader';
 import Game from './scenes/Game';
+import GameOver from './scenes/GameOver';
 
 
 
@@ -19,7 +20,7 @@ const config: Phaser.Types.Core.GameConfig = {
 		},
 	},
 	// 순서 신경 써줘야함.
-	scene: [Preloader,Game],
+	scene: [Preloader,Game, GameOver],
 }
 
 export default new Phaser.Game(config)
