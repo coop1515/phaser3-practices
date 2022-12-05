@@ -15,6 +15,7 @@ const config: Phaser.Types.Core.GameConfig = {
 		default: 'arcade',
 		arcade: {
 			gravity: { y: 200 },
+			debug: true
 		},
 	},
 	// 순서 신경 써줘야함.
