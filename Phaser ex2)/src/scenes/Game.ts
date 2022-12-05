@@ -111,7 +111,7 @@ export default class Game extends Phaser.Scene{
         if(this.mouseHole.x + this.mouseHole.width < scrollX){
             this.mouseHole.x = Phaser.Math.Between(
                 rightEdge + 100,
-                rightEdge + 1000
+                rightEdge + 2000
             )
         }
     }
