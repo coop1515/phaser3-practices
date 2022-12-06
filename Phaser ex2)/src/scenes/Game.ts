@@ -2,7 +2,6 @@ import Phaser from "phaser";
 import TextureKeys from "../consts/TextureKeys";
 import LaserObstacle from "../game/LaserObstacle";
 import RocketMouse from './../game/RocketMouse';
-import SceneKeys from './../consts/SceneKeys';
 
 export default class Game extends Phaser.Scene {
     private background !: Phaser.GameObjects.TileSprite;
@@ -17,6 +16,7 @@ export default class Game extends Phaser.Scene {
     private coins !: Phaser.Physics.Arcade.StaticGroup;
     private scoreLabel !: Phaser.GameObjects.Text
     private score = 0
+    private mouse !: RocketMouse;
 
     init(){
         this.score = 0
@@ -123,10 +123,10 @@ export default class Game extends Phaser.Scene {
         // .setOrigin(0.5,1) //setOrigin 초기 시작 지점 x,y
         // .play(AnimationKeys.RocketMouseRun)
 
-        const mouse = new RocketMouse(this, width * 0.5, height - 30)
-        this.add.existing(mouse)
+        this.mouse = new RocketMouse(this, width * 0.5, height - 30)
+        this.add.existing(this.mouse)
 
-        const body = mouse.body as Phaser.Physics.Arcade.Body;
+        const body = this.mouse.body as Phaser.Physics.Arcade.Body;
         body.setCollideWorldBounds(true);
         body.setVelocityX(200);
 
@@ -135,13 +135,13 @@ export default class Game extends Phaser.Scene {
             Number.MAX_SAFE_INTEGER, height - 55
         )
 
-        this.cameras.main.startFollow(mouse)
+        this.cameras.main.startFollow(this.mouse)
         this.cameras.main.setBounds(0, 0, Number.MAX_SAFE_INTEGER, height)
 
         // 레이저 충돌
         this.physics.add.overlap(
             this.laserObstacle,
-            mouse,
+            this.mouse,
             this.handleOverlapLaser,
             undefined,
             this
@@ -150,7 +150,7 @@ export default class Game extends Phaser.Scene {
         // 코인 충돌
         this.physics.add.overlap(
             this.coins,
-            mouse,
+            this.mouse,
             this.handleCollectionCoin,
             undefined,
             this
@@ -181,6 +181,10 @@ export default class Game extends Phaser.Scene {
 
         // 카메라따라 백그라운드도 이미지도 이동.
         this.background.setTilePosition(this.cameras.main.scrollX)
+
+        // this.teleportBackwards()
+
+
     }
 
     private wrapMouseHole() {
@@ -284,15 +288,6 @@ export default class Game extends Phaser.Scene {
 
     }
 
-    // private handleOverlapLaser(
-    //     obj1: Phaser.GameObjects.GameObject,
-    //     obj2: Phaser.GameObjects.GameObject
-
-    // )
-    // {
-    //     console.log('overlap')
-    // }
-
     private handleOverlapLaser(obj1: Phaser.GameObjects.GameObject, obj2: Phaser.GameObjects.GameObject)
 	{   
         // console.log('overlap')
@@ -318,8 +313,11 @@ export default class Game extends Phaser.Scene {
         // console.log("sc ", scrollX, " scale ", this.scale.width)
         // console.log(x)
 
+        // 생성할 코인 갯수
         const numCoins = Phaser.Math.Between(1,20)
+        console.log(numCoins)
 
+        // 코인 생성
         for (let i = 0; i < numCoins; ++i){
             const coin = this.coins.get(
                 x,
@@ -328,7 +326,7 @@ export default class Game extends Phaser.Scene {
             ) as Phaser.Physics.Arcade.Sprite
 
             coin.setVisible(true)
-            coin.setActive(true)
+            coin.setActive(true )
 
             const body = coin.body as Phaser.Physics.Arcade.StaticBody
             body.setCircle(body.width * 0,5)
@@ -354,4 +352,41 @@ export default class Game extends Phaser.Scene {
         this.scoreLabel.text = `Scroe: ${this.score}`
     }
 
+    private teleportBackwards(){ 
+        const scrollX = this.cameras.main.scrollX
+        const maxX = 2380
+        // console.log(scrollX)
+        if(scrollX > maxX)
+        {
+            this.mouse.x -= maxX
+            this.mouseHole.x -= maxX
+
+            this.windows.forEach(win => {
+                win.x -= maxX
+            })
+
+            this.bookcases.forEach(bc => {
+                bc.x -= maxX
+            })
+
+            this.laserObstacle.x -= maxX
+            const laserBody = this.laserObstacle.body as Phaser.Physics.Arcade.StaticBody
+
+            laserBody.x -= maxX
+
+            this.spawnCoins()
+
+            this.coins.children.each(child => {
+                const coin = child as Phaser.Physics.Arcade.Sprite
+                if(!coin.active){
+                    return
+                }
+
+                coin.x -= maxX
+                const body = coin.body as Phaser.Physics.Arcade.StaticBody
+                body.updateFromGameObject()
+            })
+
+        }
+    }
 }

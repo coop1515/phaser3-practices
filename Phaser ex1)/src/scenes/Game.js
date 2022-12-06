@@ -47,8 +47,10 @@ export default class Game extends Phaser.Scene{
         // this.physics.add.image(260,320,'platform')
         //     .setScale(0.5);
         // const platforms = this.physics.add.staticGroup()
+    
         this.platforms = this.physics.add.staticGroup()
         
+        // platform 발판 생성
         for(let i = 0; i <5; ++i){
             const x = Phaser.Math.Between(80,400)
             const y = 150 * i

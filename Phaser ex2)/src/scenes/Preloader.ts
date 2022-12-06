@@ -1,8 +1,6 @@
 import Phaser from "phaser";
 import TextureKeys from "../consts/TextureKeys";
 import SceneKeys from "../consts/SceneKeys";
-import AnimationKeys from "../consts/AnimationKeys";
-import RocketMouse from './../game/RocketMouse';
 
 export default class Preloader extends Phaser.Scene {
 
@@ -28,65 +26,66 @@ export default class Preloader extends Phaser.Scene {
     }
 
     create() {
-        this.anims.create({
-            key: AnimationKeys.RocketMouseRun,
-            frames: this.anims.generateFrameNames(TextureKeys.RocketMouse, {
-                start: 1,
-                end: 4,
-                prefix: 'rocketmouse_run',
-                zeroPad: 2,
-                suffix: '.png'
-            }),
-            frameRate: 10,
-            repeat: -1
-        })
+        // RocketMouse.ts로 소스 이동
+        // this.anims.create({
+        //     key: AnimationKeys.RocketMouseRun,
+        //     frames: this.anims.generateFrameNames(TextureKeys.RocketMouse, {
+        //         start: 1,
+        //         end: 4,
+        //         prefix: 'rocketmouse_run',
+        //         zeroPad: 2,
+        //         suffix: '.png'
+        //     }),
+        //     frameRate: 10,
+        //     repeat: -1
+        // })
 
-        // fall animation
-        this.anims.create({
-            key: AnimationKeys.RocketMousefall,
-            frames: [{
-                key: TextureKeys.RocketMouse,
-                frame: 'rocketmouse_fall01.png'
-            }]
+        // // fall animation
+        // this.anims.create({
+        //     key: AnimationKeys.RocketMousefall,
+        //     frames: [{
+        //         key: TextureKeys.RocketMouse,
+        //         frame: 'rocketmouse_fall01.png'
+        //     }]
 
-        })
+        // })
 
-        // fly animation
-        this.anims.create({
-            key: AnimationKeys.RocketMouseFly,
-            frames: [{
-                key: TextureKeys.RocketMouse,
-                frame: 'rocketmouse_fly01.png'
-            }]
+        // // fly animation
+        // this.anims.create({
+        //     key: AnimationKeys.RocketMouseFly,
+        //     frames: [{
+        //         key: TextureKeys.RocketMouse,
+        //         frame: 'rocketmouse_fly01.png'
+        //     }]
 
-        })
-        // flame
-        this.anims.create({
-            key: AnimationKeys.RocketFlamesOn,
-            frames: this.anims.generateFrameNames(TextureKeys.RocketMouse,
-                {
-                    start: 1,
-                    end: 2,
-                    prefix: 'flame',
-                    suffix: '.png'
-                }),
-            frameRate: 10,
-            repeat: -1
-        })
+        // })
+        // // flame
+        // this.anims.create({
+        //     key: AnimationKeys.RocketFlamesOn,
+        //     frames: this.anims.generateFrameNames(TextureKeys.RocketMouse,
+        //         {
+        //             start: 1,
+        //             end: 2,
+        //             prefix: 'flame',
+        //             suffix: '.png'
+        //         }),
+        //     frameRate: 10,
+        //     repeat: -1
+        // })
 
-        //rocket dead
-        this.anims.create({
-            key: AnimationKeys.RocketMouseDead,
-            frames: this.anims.generateFrameNames(TextureKeys.RocketMouse,
-                {
-                    start: 1,
-                    end : 2,
-                    prefix : 'rocketmouse_dead',
-                    zeroPad: 2,
-                    suffix: '.png'
-                }),
-                frameRate: 10
-        })
+        // //rocket dead
+        // this.anims.create({
+        //     key: AnimationKeys.RocketMouseDead,
+        //     frames: this.anims.generateFrameNames(TextureKeys.RocketMouse,
+        //         {
+        //             start: 1,
+        //             end : 2,
+        //             prefix : 'rocketmouse_dead',
+        //             zeroPad: 2,
+        //             suffix: '.png'
+        //         }),
+        //         frameRate: 10
+        // })
 
         this.scene.start(SceneKeys.Game)
     }
