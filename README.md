@@ -8,5 +8,5 @@ ex2)
 How to play
 1. npm install
 2. npm start
-3. if Don't start game, Go to the Link below
+3. If the game doesn't start, Go to the Link below
 source https://github.com/ourcade/infinite-runner-template-phaser3
