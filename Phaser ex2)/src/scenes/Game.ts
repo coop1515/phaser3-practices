@@ -61,6 +61,7 @@ export default class Game extends Phaser.Scene {
         const width = this.scale.width
         const height = this.scale.height
 
+        //tileSprite로 맞지않는 이미지 크기를 맞춰줌. 이어붙이기.
         this.background = this.add.tileSprite(0, 0, width, height, TextureKeys.Background)
             .setOrigin(0)
             .setScrollFactor(0, 0)
@@ -82,7 +83,8 @@ export default class Game extends Phaser.Scene {
             200,
             TextureKeys.Window2
         )
-
+        
+        // 하나로 묶음
         this.windows = [this.window1, this.window2]
 
         this.bookCase1 = this.add.image(
@@ -98,7 +100,8 @@ export default class Game extends Phaser.Scene {
             TextureKeys.BookCase2
         )
             .setOrigin(0.5, 1)
-
+        
+        // 하나로 묶음
         this.bookcases = [this.bookCase1, this.bookCase2]
 
         this.laserObstacle = new LaserObstacle(this, 900, 100)
@@ -127,16 +130,16 @@ export default class Game extends Phaser.Scene {
         this.add.existing(this.mouse)
 
         const body = this.mouse.body as Phaser.Physics.Arcade.Body;
-        body.setCollideWorldBounds(true);
-        body.setVelocityX(200);
+        body.setCollideWorldBounds(true); //true 하면 화면 밖으로 못나감. false시 화면 밖으로 튀어나감.
+        body.setVelocityX(200); // player가 X축으로 움직이는 속도.
 
         this.physics.world.setBounds(
-            0, 0,
-            Number.MAX_SAFE_INTEGER, height - 55
+            0, 0, // x y 게임화면의 x y
+            Number.MAX_SAFE_INTEGER, height - 55 // width, height 플레이어가 이동할 수 있는 거리
         )
-
-        this.cameras.main.startFollow(this.mouse)
-        this.cameras.main.setBounds(0, 0, Number.MAX_SAFE_INTEGER, height)
+        
+        this.cameras.main.startFollow(this.mouse) // this.mouse를 카메라가 따라간다.
+        this.cameras.main.setBounds(0, 0, Number.MAX_SAFE_INTEGER, height) // 카메라가 볼 수있는 범위 설정
 
         // 레이저 충돌
         this.physics.add.overlap(
@@ -201,24 +204,33 @@ export default class Game extends Phaser.Scene {
 
     private WrapWindows() {
         const scrollX = this.cameras.main.scrollX;
-        const rightEdge = scrollX + this.scale.width
-
+        const rightEdge = scrollX + this.scale.width //scrollX = 0에서 3(player속도에 따라 다름)씩 증가, this.scale.width 는 800
+        // console.log(scrollX)
+        // console.log(rightEdge)
         // multiply by 2 to add some more padding
-        let width = this.window1.width * 2
+        let width = this.window1.width * 2 //this.window1.width = 270 png파일크기 width window2도 동일.
+        // console.log(this.window1.x) x의 값은 위에서 설정한대로 900 ~ 1300 사이
         if (this.window1.x + width < scrollX) {
             this.window1.x = Phaser.Math.Between(
                 rightEdge + width,
                 rightEdge + width + 800
             )
-            const overlap = this.bookcases.find(bc => {
+            // console.log(this.window1.x)
+            const overlap = this.bookcases.find(bc => { // find함수 bookcases에 있는 bookcase1 bookcsae2 반복문
+                // console.log(this.bookCase1.x)
+                // console.log(this.bookCase2.x)
+                // console.log(" bc " ,bc.x) // bc.x = bookcase?(2 after 1).x
+                console.log(Math.abs(this.window1.x - bc.x) <= this.window1.width)
                 return Math.abs(this.window1.x - bc.x) <= this.window1.width
             })
 
             this.window1.visible = !overlap
         }
 
-        width = this.window2.width
+        width = this.window2.width // this.window2.width = 270 png 파일크기
+        // console.log(width)
         if (this.window2.x + width < scrollX) {
+            // console.log(" 2 ",this.window1.x)
             this.window2.x = Phaser.Math.Between(
                 this.window1.x + width,
                 this.window1.x + width + 800
@@ -233,11 +245,11 @@ export default class Game extends Phaser.Scene {
     }
 
     private WrapBookcases() {
-        const scrollX = this.cameras.main.scrollX;
-        const rightEdge = scrollX + this.scale.width
-
+        const scrollX = this.cameras.main.scrollX; // 0부터 3(플레이어 이동속도)씩 증가.
+        const rightEdge = scrollX + this.scale.width // this.scale.width = 800 게임 해상도 
+        // console.log(rightEdge)
         // multiply by 2 to add some more padding
-        let width = this.bookCase1.width * 2
+        let width = this.bookCase1.width * 2 // this.bookCase1.width = 262 png파일 크기
         if (this.bookCase1.x + width < scrollX) {
             this.bookCase1.x = Phaser.Math.Between(
                 rightEdge + width,
@@ -251,7 +263,8 @@ export default class Game extends Phaser.Scene {
             this.bookCase1.visible = !overlap
         }
 
-        width = this.bookCase2.width
+        width = this.bookCase2.width //tihs.bookCase2.width = 262
+
         if (this.bookCase2.x + width < scrollX) {
             this.bookCase2.x = Phaser.Math.Between(
                 this.bookCase1.x + width,
@@ -315,7 +328,7 @@ export default class Game extends Phaser.Scene {
 
         // 생성할 코인 갯수
         const numCoins = Phaser.Math.Between(1,20)
-        console.log(numCoins)
+        // console.log(numCoins)
 
         // 코인 생성
         for (let i = 0; i < numCoins; ++i){

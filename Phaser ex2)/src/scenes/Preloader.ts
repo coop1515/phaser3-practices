@@ -18,6 +18,9 @@ export default class Preloader extends Phaser.Scene {
         this.load.image(TextureKeys.LaserEnd, 'house/object_laser_end.png')
         this.load.image(TextureKeys.LaserMiddle, 'house/object_laser.png')
         this.load.image(TextureKeys.Coin, 'house/object_coin.png')
+        // this.load.spritesheet(key, '.png', x, y, f) size = x * y, f=frame 를 사용해도 되지만
+        // spritesheet는 각 프레임이 고정된 크기이고 ()
+        // atlas는 크기가 다른 프레임을 가짐. -> 상황에 맞춰 사용하면 된다.
         this.load.atlas(
             TextureKeys.RocketMouse,
             'characters/rocket-mouse.png',
@@ -47,7 +50,6 @@ export default class Preloader extends Phaser.Scene {
         //         key: TextureKeys.RocketMouse,
         //         frame: 'rocketmouse_fall01.png'
         //     }]
-
         // })
 
         // // fly animation
