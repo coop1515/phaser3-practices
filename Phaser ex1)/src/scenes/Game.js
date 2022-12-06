@@ -41,7 +41,7 @@ export default class Game extends Phaser.Scene{
 
     create(){
         this.add.image(240,280,'background').setScale(1.5)
-            .setScrollFactor(1,0)
+            .setScrollFactor(1,0) // (x,y) 1이면 스크롤 따라 움직이고 0이면 스크롤 상관없이 멈춰있음. 
         
         // platform
         // this.physics.add.image(260,320,'platform')
@@ -77,14 +77,14 @@ export default class Game extends Phaser.Scene{
         // platforms와 this.player 두개 사이의 물리법칙(충돌)
         this.physics.add.collider(this.platforms,this.player);
         
-        // body.checkCollision 바디의 충돌 여부와 방향 확인.
+        // body.checkCollision 바디의 방향별 충돌 여부 확인.
         this.player.body.checkCollision.up = false;
         this.player.body.checkCollision.left = false;
         this.player.body.checkCollision.right = false;
 
         //player 기준으로 카메라(뷰) 따라감.
         this.cameras.main.startFollow(this.player);
-
+        
         this.cameras.main.setDeadzone(this.scale.width * 1.5)
 
         // carrot
@@ -95,8 +95,10 @@ export default class Game extends Phaser.Scene{
         })
 
         // this.carrots.get(240, 320, 'carrot').setScale(0.1)
+        // platforms와 carrots 충돌 물리법칙 적용으로 안겹쳐짐
         this.physics.add.collider(this.platforms, this.carrots)
         
+        // overlap(a,b,c,d,e) a,b끼리 충돌시 c 콜백 .
         this.physics.add.overlap(
             this.player,
             this.carrots,
@@ -108,13 +110,13 @@ export default class Game extends Phaser.Scene{
         const style = { color: '#000', fontSize: 24}
         this.carrotsCollectedText = this.add.text(240, 10, 'Carrots: 0', style)
             // 화면 스크롤에 따라 가는것
-            .setScrollFactor(0)
+            .setScrollFactor(0) //1로 변경하게되면 동기화 되어 움직임.
             // 위치선정
             .setOrigin(0.5,0)
     }
 
     update(t, dt){
-
+        // iterate가 반복해서 platform을 생성해줌.
         this.platforms.children.iterate(child => {
             const platform = child
 
@@ -122,7 +124,8 @@ export default class Game extends Phaser.Scene{
             if(platform.y >= scrollY + 700)
             {
                 platform.y = scrollY - Phaser.Math.Between(50, 100)
-                platform.body.updateFromGameObject()
+                // 새로생긴 platform을 update해줌 update해주지않으면 platform은 생성되지만 제 기능을 못함.
+                platform.body.updateFromGameObject() 
 
                 // create a carrot above the platorm being reused
                 this.addCarrotAbove(platform)
@@ -160,6 +163,8 @@ export default class Game extends Phaser.Scene{
         this.horizontalWrap(this.player)
 
         const bottomPlatform = this.findBottomMostPlatform()
+        
+        // 맨 밑 platform을 찾아서 그거보다 200px 밑으로 내려가면 게임 오버
         if(this.player.y > bottomPlatform.y + 200){
             // console.log('game over')
             this.scene.start('game-over')
@@ -170,9 +175,12 @@ export default class Game extends Phaser.Scene{
     /**
      * @param {Phaser.GameObjects.sprite} sprite
      */
-    horizontalWrap(sprite){
-        const halfWidth = sprite.displayWidth * 0.5
+    horizontalWrap(sprite){ 
+        
+        const halfWidth = sprite.displayWidth * 0.5 
         const gameWidth = this.scale.width
+
+        // x축화면 밖으로 벗어나도 다시 화면안으로 돌아오게 해줌. -> 화면 안에 존재하게 감싸주는 부분
         if (sprite.x < -halfWidth){
             sprite.x = gameWidth + halfWidth
         }
