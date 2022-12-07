@@ -23,19 +23,20 @@ export default class RocketMouse extends Phaser.GameObjects.Container {
 
         this.mouse = scene.add.sprite(0, 0, TextureKeys.RocketMouse)
             .setOrigin(0.5, 1)
-            // .play(AnimationKeys.RocketMouseRun)
-        
+        // .play(AnimationKeys.RocketMouseRun)
+
         this.flames = scene.add.sprite(-63, -15, TextureKeys.RocketMouse)
-            // .play(AnimationKeys.RocketFlamesOn)
-        
+        // .play(AnimationKeys.RocketFlamesOn)
+
         this.createAnimations()
         this.mouse.play(AnimationKeys.RocketMouseRun)
         this.flames.play(AnimationKeys.RocketFlamesOn)
-         
+
         this.enableJetpack(false)
         this.add(this.flames)
         this.add(this.mouse)
-        
+
+        // console.log(this)
         scene.physics.add.existing(this)
 
         const body = this.body as Phaser.Physics.Arcade.Body
@@ -50,6 +51,7 @@ export default class RocketMouse extends Phaser.GameObjects.Container {
     }
 
     kill() {
+        // 이게 없으면 죽은 상태로 레이저에 닿게 되어도 kill()함수가 무한으로 불려짐.
         if (this.mouseState !== MouseState.Running) {
             return
         }
@@ -71,51 +73,48 @@ export default class RocketMouse extends Phaser.GameObjects.Container {
         switch (this.mouseState) {
             case MouseState.Running:
                 {
-                // check is space pressed
-                if (this.cursors.space?.isDown) {
-                    body.setAccelerationY(-600)
-                    this.enableJetpack(true)
+                    // check is space pressed
+                    if (this.cursors.space?.isDown) {
+                        body.setAccelerationY(-600)
+                        this.enableJetpack(true)
 
-                    this.mouse.play(AnimationKeys.RocketMouseFly, true)
+                        this.mouse.play(AnimationKeys.RocketMouseFly, true)
+                    }
+                    else {
+                        //AccelerationY를 다시 0으로 세팅.
+                        body.setAccelerationY(0)
+                        this.enableJetpack(false)
+                        // this.mouse.play(AnimationKeys.RocketMousefall,true)
+                    }
+
+                    // check touching ground
+                    if (body.blocked.down) {
+                        this.mouse.play(AnimationKeys.RocketMouseRun, true)
+                    }
+                    else if (body.velocity.y > 0) {
+                        this.mouse.play(AnimationKeys.RocketMousefall, true)
+                    }
+                    break;
                 }
-                else {
-                    body.setAccelerationY(0)
-                    this.enableJetpack(false)
 
-                    // this.mouse.play(AnimationKeys.RocketMousefall,true)
-                }
-
-                // check touching ground
-                if (body.blocked.down) {
-                    this.mouse.play(AnimationKeys.RocketMouseRun, true)
-                }
-                else if (body.velocity.y > 0) {
-                    this.mouse.play(AnimationKeys.RocketMousefall, true)
-                }
-
-                break;
-            }
-
-            case MouseState.killed:{
+            case MouseState.killed: {
                 body.velocity.x *= 0.99
-
-                if(body.velocity.x <= 5)
-                {
+                // console.log(body.velocity.x)
+                if (body.velocity.x <= 5) {
                     this.mouseState = MouseState.Dead
                 }
                 break;
             }
 
-            case MouseState.Dead:{
+            case MouseState.Dead: {
                 body.setVelocity(0, 0)
-
                 this.scene.scene.run(SceneKeys.GameOver)
                 break;
             }
         }
     }
 
-    private createAnimations(){
+    private createAnimations() {
         this.mouse.anims.create({
             key: AnimationKeys.RocketMouseRun,
             frames: this.mouse.anims.generateFrameNames(TextureKeys.RocketMouse, {
@@ -168,13 +167,13 @@ export default class RocketMouse extends Phaser.GameObjects.Container {
             frames: this.mouse.anims.generateFrameNames(TextureKeys.RocketMouse,
                 {
                     start: 1,
-                    end : 2,
-                    prefix : 'rocketmouse_dead',
+                    end: 2,
+                    prefix: 'rocketmouse_dead',
                     zeroPad: 2,
                     suffix: '.png'
                 }),
-                frameRate: 10
+            frameRate: 10
         })
     }
-    
+
 }

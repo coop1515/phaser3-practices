@@ -10,7 +10,6 @@ export default class GameOver extends Phaser.Scene
     create()
     {
         const {width, height} = this.scale
-
         const x = width * 0.5
         const y = height * 0.5
 
@@ -24,9 +23,9 @@ export default class GameOver extends Phaser.Scene
         .setOrigin(0.5)
 
         this.input.keyboard.once('keydown-SPACE', () => {
-            // this.scene.stop(SceneKeys.GameOver)
+            this.scene.stop(SceneKeys.GameOver)
 
-            // this.scene.stop(SceneKeys.Game)
+            this.scene.stop(SceneKeys.Game)
             this.scene.start(SceneKeys.Game)
         })
     }

@@ -1,6 +1,5 @@
 import Phaser from "phaser";
 import TextureKeys from "../consts/TextureKeys";
-import { Body } from 'matter';
 
 export default class LaserObstacle extends Phaser.GameObjects.Container{
 
@@ -11,6 +10,8 @@ export default class LaserObstacle extends Phaser.GameObjects.Container{
         const top = scene.add.image(0, 0, TextureKeys.LaserEnd)
                             .setOrigin(0.5,0)
 
+        // console.log(top.y)
+        // console.log(top.displayHeight)
         const middle = scene.add.image(
             0,
             top.y + top.displayHeight,

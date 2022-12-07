@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import SceneKeys from "../consts/SceneKeys";
 import TextureKeys from "../consts/TextureKeys";
 import LaserObstacle from "../game/LaserObstacle";
 import RocketMouse from './../game/RocketMouse';
@@ -25,7 +26,7 @@ export default class Game extends Phaser.Scene {
 
 
     constructor() {
-        super('game')
+        super(SceneKeys.Game)
     }
 
     // preload(){
@@ -141,7 +142,7 @@ export default class Game extends Phaser.Scene {
         this.cameras.main.startFollow(this.mouse) // this.mouse를 카메라가 따라간다.
         this.cameras.main.setBounds(0, 0, Number.MAX_SAFE_INTEGER, height) // 카메라가 볼 수있는 범위 설정
 
-        // 레이저 충돌
+        // 레이저 overlap
         this.physics.add.overlap(
             this.laserObstacle,
             this.mouse,
@@ -150,7 +151,7 @@ export default class Game extends Phaser.Scene {
             this
         )
 
-        // 코인 충돌
+        // 코인 overlap
         this.physics.add.overlap(
             this.coins,
             this.mouse,
@@ -185,7 +186,7 @@ export default class Game extends Phaser.Scene {
         // 카메라따라 백그라운드도 이미지도 이동.
         this.background.setTilePosition(this.cameras.main.scrollX)
 
-        // this.teleportBackwards()
+        this.teleportBackwards()
 
 
     }
@@ -220,11 +221,15 @@ export default class Game extends Phaser.Scene {
                 // console.log(this.bookCase1.x)
                 // console.log(this.bookCase2.x)
                 // console.log(" bc " ,bc.x) // bc.x = bookcase?(2 after 1).x
-                console.log(Math.abs(this.window1.x - bc.x) <= this.window1.width)
-                return Math.abs(this.window1.x - bc.x) <= this.window1.width
+                // console.log(" window1.x ", this.window1.x)
+                // console.log(" window.width ", this.window1.width)
+                // console.log(Math.abs(this.window1.x - bc.x) <= this.window1.width) 
+
+                // window1.x와 bookcase의 거리가 270(this.window1.width)이 안되면 overlap되어있는거니까 TRUE를 반환.
+                return Math.abs(this.window1.x - bc.x) <= this.window1.width 
             })
 
-            this.window1.visible = !overlap
+            this.window1.visible = !overlap // window1은 overlap = true 안보임. false면 보임 
         }
 
         width = this.window2.width // this.window2.width = 270 png 파일크기
@@ -255,7 +260,8 @@ export default class Game extends Phaser.Scene {
                 rightEdge + width,
                 rightEdge + width + 800
             )
-
+            
+            //windows overlap과 동일.
             const overlap = this.windows.find(win => {
                 return Math.abs(this.bookCase1.x - win.x) <= this.bookCase1.width
             })
@@ -275,7 +281,7 @@ export default class Game extends Phaser.Scene {
                 return Math.abs(this.bookCase2.x - win.x) <= this.bookCase2.width
             })
 
-            this.bookCase1.visible = !overlap
+            this.bookCase2.visible = !overlap
             this.spawnCoins()
         }
     }
@@ -294,7 +300,9 @@ export default class Game extends Phaser.Scene {
             rightEdge + width + 1000)
 
             this.laserObstacle.y = Phaser.Math.Between(0, 300)
-
+            
+            // console.log(this.laserObstacle.x)
+            // console.log(body.offset.x);
             body.position.x = this.laserObstacle.x + body.offset.x;
             body.position.y = this.laserObstacle.y
         }
@@ -312,11 +320,12 @@ export default class Game extends Phaser.Scene {
 	}
 
     private spawnCoins(){
-        this.coins.children.each(child => {
-            const coin = child as Phaser.Physics.Arcade.Sprite
-            this.coins.killAndHide(coin)
-            coin.body.enable = false
-        })
+        
+        // this.coins.children.each(child => {
+        //     const coin = child as Phaser.Physics.Arcade.Sprite
+        //     this.coins.killAndHide(coin) // 그룹.killAndHide(그룹원)
+        //     coin.body.enable = false
+        // })
 
         const scrollX = this.cameras.main.scrollX
         const rightEdge = scrollX + this.scale.width
@@ -339,13 +348,17 @@ export default class Game extends Phaser.Scene {
             ) as Phaser.Physics.Arcade.Sprite
 
             coin.setVisible(true)
-            coin.setActive(true )
+            coin.setActive(true) // true로 설정하면 scenes uopdatelist에 의해 업데이트 됨
 
             const body = coin.body as Phaser.Physics.Arcade.StaticBody
-            body.setCircle(body.width * 0,5)
+            
+            body.setCircle(body.width * 0.5) //hitbox의 모양을 원으로 만듬.
+            
+            //body와 충돌을 가능하게 함. -> player와 coin이 부딪히는걸 가능하게 해줌. 
             body.enable = true
 
-            body.updateFromGameObject()
+            //  물리적 본체 활성화
+            body.updateFromGameObject() // coin object body의 position, width, height를 update해주는것.
 
             x += coin.width * 1.5
         }
@@ -359,7 +372,7 @@ export default class Game extends Phaser.Scene {
         const coin = obj2 as Phaser.Physics.Arcade.Sprite
 
         this.coins.killAndHide(coin)
-        coin.body.enable = false
+        coin.body.enable = false // 안끄면 이미 획득한 coin의 hitbox에 닿을때도 계속 count됨.
 
         this.score += 1
         this.scoreLabel.text = `Scroe: ${this.score}`
@@ -371,7 +384,7 @@ export default class Game extends Phaser.Scene {
         // console.log(scrollX)
         if(scrollX > maxX)
         {
-            this.mouse.x -= maxX
+            this.mouse.x -= maxX // this.mouse.x == this.cameras.main.scrollX == scrollX
             this.mouseHole.x -= maxX
 
             this.windows.forEach(win => {
