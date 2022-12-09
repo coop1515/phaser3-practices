@@ -10,6 +10,7 @@ export default class Game extends Phaser.Scene {
     private window1 !: Phaser.GameObjects.Image;
     private window2 !: Phaser.GameObjects.Image;
     private bookCase1 !: Phaser.GameObjects.Image;
+    
     private bookCase2 !: Phaser.GameObjects.Image;
     private bookcases: Phaser.GameObjects.Image[] = []
     private windows: Phaser.GameObjects.Image[] = []
@@ -368,7 +369,7 @@ export default class Game extends Phaser.Scene {
     private handleCollectionCoin(obj1: Phaser.GameObjects.GameObject, obj2: Phaser.GameObjects.GameObject)
     {
         // obj1 = rocketMouse, obj2 : ArcadeSprite2
-        // console.log(obj2)
+        console.log(obj2)
         const coin = obj2 as Phaser.Physics.Arcade.Sprite
 
         this.coins.killAndHide(coin)

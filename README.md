@@ -10,3 +10,10 @@ How to play
 2. npm start
 3. If the game doesn't start, Go to the Link below
 ## source https://github.com/ourcade/infinite-runner-template-phaser3
+
+
+Android Environment Setting
+
+## JAVA_HOME : Add JAVA in PATH
+
+## ANDROID_HOME : C:\Users\(ComputerName)\AppData\Local\Android\Sdk
