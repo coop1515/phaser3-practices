@@ -113,6 +113,16 @@ export default class Game extends Phaser.Scene{
             .setScrollFactor(0) //1로 변경하게되면 동기화 되어 움직임.
             // 위치선정
             .setOrigin(0.5,0)
+
+
+        // 월요일에 이 부분 완성하기
+        this.input.on('pointerdown', function (pointer) {
+            console.log("눌러")
+            })
+
+        this.input.on('pointerup', function (pointer) {
+            console.log("누르지마")
+            })
     }
 
     update(t, dt){
@@ -149,8 +159,11 @@ export default class Game extends Phaser.Scene{
         }
 
         // Player Move
+        
+
         if (this.cursors.left.isDown && !touchingDown){
             this.player.setVelocityX(-200)
+        
         }
         else if (this.cursors.right.isDown && !touchingDown){
             this.player.setVelocityX(200)
@@ -215,6 +228,8 @@ export default class Game extends Phaser.Scene{
     }
 
     handleCollectCarrot(player, carrot){
+
+        this.player.setVelocityY(-300)
 
         // hide from display
         this.carrots.killAndHide(carrot)
