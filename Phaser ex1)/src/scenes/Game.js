@@ -29,6 +29,9 @@ export default class Game extends Phaser.Scene{
     /** @type {Phaser.GameObjects.Text} */
     carrotsCollectedText
 
+    isMouseLeftDown = false
+    isMouseRightDown = false
+
     preload(){
         this.load.image('background', 'assets/bg_layer1.png')
         this.load.image('platform', 'assets/ground_grass.png')
@@ -115,13 +118,26 @@ export default class Game extends Phaser.Scene{
             .setOrigin(0.5,0)
 
 
-        // 월요일에 이 부분 완성하기
-        this.input.on('pointerdown', function (pointer) {
-            console.log("눌러")
-            })
 
-        this.input.on('pointerup', function (pointer) {
-            console.log("누르지마")
+        // player move(mouse)
+
+        // pointerdown
+        this.input.on('pointerdown', (pointer) => {
+            console.log(pointer)
+            if(pointer.x > this.player.x)
+            {
+                this.isMouseRightDown = true
+            }
+
+            else{
+                this.isMouseLeftDown = true
+            }
+
+            })
+        // pointer up
+        this.input.on('pointerup', () => {
+             this.isMouseLeftDown = this.isMouseRightDown = false
+
             })
     }
 
@@ -159,19 +175,33 @@ export default class Game extends Phaser.Scene{
         }
 
         // Player Move
-        
 
-        if (this.cursors.left.isDown && !touchingDown){
+        if (this.cursors.left.isDown  && !touchingDown){
             this.player.setVelocityX(-200)
         
         }
-        else if (this.cursors.right.isDown && !touchingDown){
+        else if (this.cursors.right.isDown  && !touchingDown){
             this.player.setVelocityX(200)
         }
         else{
             // stop
             this.player.setVelocityX(0)
         }
+
+        // Player Mouse Move 
+
+        if (this.isMouseLeftDown && !touchingDown){
+            this.player.setVelocityX(-200)
+        
+        }
+        else if (this.isMouseRightDown && !touchingDown){
+            this.player.setVelocityX(200)
+        }
+        else{
+            // stop
+            this.player.setVelocityX(0)
+        }
+
 
         this.horizontalWrap(this.player)
 
