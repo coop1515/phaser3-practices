@@ -187,7 +187,7 @@ export default class Game extends Phaser.Scene {
         // 카메라따라 백그라운드도 이미지도 이동.
         this.background.setTilePosition(this.cameras.main.scrollX)
 
-        this.teleportBackwards()
+        // this.teleportBackwards()
 
 
     }
