@@ -1,6 +1,6 @@
 # phaser3-practices
 
-How to play 
+### How to play 
 ex1)
 ```
 1. index.html -> Live Server
