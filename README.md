@@ -16,7 +16,7 @@ source : https://github.com/ourcade/infinite-runner-template-phaser3
 ```
 
 
-Android Environment Setting
+### Android Environment Setting
 ```
 JAVA_HOME : Add JAVA in PATH
 
