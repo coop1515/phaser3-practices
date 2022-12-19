@@ -3,7 +3,7 @@
 ### How to play 
 ex1)
 ```
-1. index.html -> Live Server
+1. index.html -> Live Server (if you use the vscode, install Live Server in extentions)
 source : https://github.com/ourcade/infinite-jumper-template-phaser3
 ```
 
