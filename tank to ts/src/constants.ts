@@ -1,0 +1,22 @@
+export default class Constants
+{
+	SET_SCORE 
+	UP_POINTS
+	SCORE_UPDATED
+	PLAY_SOUND
+	MUSIC_CHANGED
+	TOGGLE_SOUND
+	TOGGLE_MUSIC
+	START_GAME
+	constructor()
+	{
+		this.SET_SCORE="setScore";
+		this.UP_POINTS="upPoints";
+		this.SCORE_UPDATED="scoreUpdated";
+		this.PLAY_SOUND="playSound";
+		this.MUSIC_CHANGED="musicChanged";
+		this.TOGGLE_SOUND="toggleSound";
+		this.TOGGLE_MUSIC="toggleMusic";
+		this.START_GAME="start_game";
+	}
+}
