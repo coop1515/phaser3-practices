@@ -1,7 +1,8 @@
 import { emitter, G, model } from "../../main";
 
 export default class ScoreBox extends Phaser.GameObjects.Container {
-    constructor(config) {
+    text1 ?: Phaser.GameObjects.Text | undefined
+    constructor(config :any) {
         if (!config.scene) {
             console.log("missing scene!");
             return;
@@ -27,6 +28,7 @@ export default class ScoreBox extends Phaser.GameObjects.Container {
         emitter.on(G.SCORE_UPDATED, this.scoreUpdated, this);
     }
     scoreUpdated() {
+        if(this.text1)
         this.text1.setText("SCORE:" + model.score);
     }
 }

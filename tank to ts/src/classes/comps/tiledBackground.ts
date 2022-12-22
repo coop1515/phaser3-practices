@@ -37,7 +37,7 @@ export default class TiledBackground extends Phaser.GameObjects.Group {
         //if the next tile would go off the screen
         //then advance the row position by the displayHeight
         //and reset the column position to zero
-        if (this.xx > game.config.width + tile.displayWidth) {
+        if (this.xx > (game.config.width as number) + tile.displayWidth) {
             this.yy += tile.displayHeight;
             this.xx = 0;
         }

@@ -31,7 +31,7 @@ const config: Phaser.Types.Core.GameConfig = {
     dom: {
         createContainer: true
     },
-    scene: [SceneLoad, SceneTitle,SceneMain/*,SceneOver*/],
+    scene: [SceneLoad, SceneTitle,SceneMain,SceneOver],
 }
 const G = new Constants();
 const model = new Model();

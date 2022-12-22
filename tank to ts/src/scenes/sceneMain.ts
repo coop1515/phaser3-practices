@@ -1,4 +1,4 @@
-import game, { emitter, model } from "../main";
+import game, { emitter, G, model } from "../main";
 import Align from "../util/align";
 import TiledBackground from './../classes/comps/tiledBackground';
 import AlignGrid from './../util/alignGrid';
@@ -21,6 +21,7 @@ export default class SceneMain extends Phaser.Scene {
     scoreBox:any
     tank1:any
     tank2:any
+    river:any
 
     constructor() {
         super('SceneMain');
@@ -85,11 +86,11 @@ export default class SceneMain extends Phaser.Scene {
     }
     turnedWrongWay() {
         model.paused = true;
-        document.getElementById('wrongWayPortrait').style.display = "block";
+        // (document.getElementById('wrongWayPortrait') as HTMLElement).style.display = "block";
     }
     rightWay() {
         model.paused = false;
-        document.getElementById('wrongWayPortrait').style.display = "none";
+        // (document.getElementById('wrongWayPortrait') as HTMLElement).style.display = "none";
     }
     setNextMessage() {
         if (model.paused==true)
@@ -159,12 +160,12 @@ export default class SceneMain extends Phaser.Scene {
         //set the fill style to blue with no trasparency
         this.river.fillStyle(0x12E5E8, 1);
         //calculate a height of 20 percent of the game's height
-        var riverH = game.config.height * .2;
+        var riverH = game.config.height as number * .2;
         //make a rectangle
         this.river.fillRect(0, 0, game.config.width, riverH);
         //position the river at half of the games height
         //minus half of the hieght of the river
-        this.river.y = game.config.height / 2 - riverH / 2;
+        this.river.y = game.config.height as number / 2 - riverH / 2;
     }
     placeTanks() {
         //add the images
