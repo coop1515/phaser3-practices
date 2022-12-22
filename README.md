@@ -15,6 +15,15 @@ ex2)
 source : https://github.com/ourcade/infinite-runner-template-phaser3
 ```
 
+tank to ts)
+```
+1. npm install
+2. npm start
+
+localhost:(port)
+
+check port in package.json
+```
 
 ### Android Environment Setting
 ```
